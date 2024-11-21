@@ -1,756 +1,111 @@
 .community {
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
+    max-width: 1200px; /* Limit the width for better readability */
+    margin: 0 auto; /* Center the community section */
+    padding: 20px; /* Add padding around the section */
+    background-color: #f9f9f9; /* Light background color */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
 }
 
-.community .div {
-    background-color: #ffffff;
-    height: 982px;
-    overflow: hidden;
-    position: relative;
-    width: 1512px;
+.community h1 {
+    text-align: center; /* Center the title */
+    color: #333; /* Darker text color for better contrast */
+    margin-bottom: 20px; /* Space below the title */
 }
 
-.community .menu {
-    align-items: flex-start;
-    background-color: var(--variable-collection-primary-color);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    left: -1px;
-    padding: 10px 20px;
-    position: absolute;
-    top: 0;
-    width: 1512px;
+.create-post {
+    background-color: #ffffff; /* White background for the post creation area */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding inside the box */
+    margin-bottom: 30px; /* Space below the post creation area */
 }
 
-.community .frame {
-    align-items: center;
-    align-self: stretch;
-    display: flex;
-    flex: 0 0 auto;
-    gap: 131px;
-    position: relative;
-    width: 100%;
+.create-post h2 {
+    margin-bottom: 15px; /* Space below the subtitle */
+    color: #555; /* Slightly lighter color for subtitles */
 }
 
-.community .group {
-    height: 64.49px;
-    position: relative;
-    width: 169.64px;
+.create-post input[type="text"],
+.create-post textarea,
+.create-post input[type="file"] {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding for comfort */
+    margin-bottom: 15px; /* Space below each input */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 4px; /* Slightly rounded corners */
+    font-size: 16px; /* Larger font for readability */
 }
 
-.community .logo {
-    height: 64px;
-    left: 0;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    width: 62px;
+.create-post button {
+    background-color: #007bff; /* Primary button color */
+    color: white; /* White text */
+    padding: 10px 15px; /* Padding for button */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
 }
 
-.community .pet-pal {
-    height: 25px;
-    left: 68px;
-    position: absolute;
-    top: 23px;
-    width: 102px;
+.create-post button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
 }
 
-.community .navbar {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 auto;
-    gap: 82px;
-    position: relative;
+.posts {
+    display: flex; /* Flexbox for layout */
+    flex-direction: column; /* Stack posts vertically */
+    gap: 20px; /* Space between posts */
 }
 
-.community .text-wrapper {
-    color: var(--white);
-    font-family: "Instrument Sans-SemiBold", Helvetica;
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: 0;
-    line-height: normal;
-    margin-top: -1.00px;
-    position: relative;
-    width: fit-content;
+.post {
+    background-color: #ffffff; /* White background for posts */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Padding inside posts */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
-.community .text-wrapper-2 {
-    color: var(--variable-collection-faded-blue);
-    font-family: "Instrument Sans-SemiBold", Helvetica;
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: 0;
-    line-height: normal;
-    margin-top: -1.00px;
-    position: relative;
-    width: fit-content;
+.post h3 {
+    margin: 0 0 10px; /* Space below post title */
+    color: #333; /* Dark text for titles */
 }
 
-.community .text-wrapper-3 {
-    color: var(--variable-collection-light-green);
-    font-family: "Instrument Sans-SemiBold", Helvetica;
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: 0;
-    line-height: normal;
-    margin-top: -1.00px;
-    position: relative;
-    width: fit-content;
+.post p {
+    margin: 0 0 10px; /* Space below paragraphs */
+    color: #555; /* Lighter color for body text */
 }
 
-.community .frame-2 {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 auto;
-    gap: 44px;
-    margin-right: -80.64px;
-    position: relative;
+.post-footer {
+    display: flex; /* Flexbox for footer layout */
+    justify-content: space-between; /* Space between likes and button */
+    align-items: center; /* Center vertically */
 }
 
-.community .img {
-    height: 52px;
-    position: relative;
-    width: 52px;
+.like-button {
+    background-color: #28a745; /* Green button color */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 5px 10px; /* Padding for button */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
 }
 
-.community .frame-3 {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 auto;
-    gap: 14px;
-    padding: 7px 0px;
-    position: relative;
+.like-button:hover {
+    background-color: #218838; /* Darker shade on hover */
 }
 
-.community .lilly {
-    height: 61px;
-    object-fit: cover;
-    position: relative;
-    width: 58px;
-}
-
-.community .oui-arrow-up {
-    height: 27px;
-    position: relative;
-    width: 27px;
-}
-
-.community .iconamoon-settings {
-    height: 55px;
-    position: relative;
-    width: 55px;
-}
-
-.community .iconamoon-settings-2 {
-    height: 55px;
-    margin-bottom: -68.00px;
-    margin-left: -12790.64px;
-    position: relative;
-    width: 55px;
-}
-
-.community .overlap {
-    height: 877px;
-    left: 63px;
-    position: absolute;
-    top: 126px;
-    width: 966px;
-}
-
-.community .frame-4 {
-    align-items: center;
-    background-color: #ffffff;
-    border-radius: 8px;
-    display: flex;
-    gap: 24px;
-    height: 110px;
-    justify-content: center;
-    left: 0;
-    padding: 0px 16px;
-    position: absolute;
-    top: 0;
-    width: 959px;
-}
-
-.community .img-wrapper {
-    align-items: center;
-    background-color: #cfcfcf;
-    border-radius: 34.04px;
-    display: inline-flex;
-    flex: 0 0 auto;
-    gap: 3.4px;
-    justify-content: center;
-    padding: 3.4px;
-    position: relative;
-}
-
-.community .img-2 {
-    height: 57.19px;
-    object-fit: cover;
-    position: relative;
-    width: 57.19px;
-}
-
-.community .frame-5 {
-    align-items: flex-start;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    gap: 10px;
-    position: relative;
-}
-
-.community .rectangle {
-    background-color: #f2f2f2;
-    border: 1px solid;
-    border-color: #e4e4e4;
-    border-radius: 8px;
-    height: 64px;
-    position: relative;
-    width: 786px;
-}
-
-.community .frame-6 {
-    align-items: center;
-    display: inline-flex;
-    flex-wrap: wrap;
-    gap: 396px 396px;
-    justify-content: center;
-    left: 24px;
-    position: absolute;
-    top: 18px;
-}
-
-.community .p {
-    color: #38618d;
-    font-family: "Instrument Sans-Medium", Helvetica;
-    font-size: 18px;
-    font-weight: 500;
-    letter-spacing: 0;
-    line-height: normal;
-    position: relative;
-    width: fit-content;
-}
-
-.community .frame-7 {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-wrap: wrap;
-    gap: 8px 8px;
-    justify-content: center;
-    position: relative;
-}
-
-.community .img-3 {
-    height: 28px;
-    position: relative;
-    width: 28px;
-}
-
-.community .frame-wrapper {
-    background-color: #fafafb;
-    border-radius: 10px;
-    height: 771px;
-    left: 0;
-    overflow: hidden;
-    overflow-y: scroll;
-    position: absolute;
-    top: 106px;
-    width: 966px;
-}
-
-.community .div-wrapper {
-    align-items: center;
-    display: inline-flex;
-    flex-direction: column;
-    gap: 30px;
-    justify-content: center;
-    left: 30px;
-    padding: 0px 0px 41px;
-    position: relative;
-    top: 30px;
-}
-
-.community .frame-8 {
-    align-items: center;
-    background-color: #ffffff;
-    border-radius: 8px;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    gap: 32px;
-    justify-content: center;
-    padding: 16px;
-    position: relative;
-}
-
-.community .frame-9 {
-    align-items: flex-start;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    gap: 24px;
-    justify-content: center;
-    position: relative;
-}
-
-.community .frame-10 {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-wrap: wrap;
-    gap: 16px 16px;
-    justify-content: center;
-    position: relative;
-}
-
-.community .rectangle-2 {
-    height: 60px;
-    object-fit: cover;
-    position: relative;
-    width: 60px;
-}
-
-.community .frame-11 {
-    align-items: flex-start;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    gap: 8px;
-    justify-content: center;
-    position: relative;
-}
-
-.community .text-wrapper-4 {
-    color: var(--variable-collection-primary-color);
-    font-family: "Instrument Sans-Medium", Helvetica;
-    font-size: 18px;
-    font-weight: 500;
-    letter-spacing: 0;
-    line-height: normal;
-    margin-top: -1.00px;
-    position: relative;
-    width: fit-content;
-}
-
-.community .frame-12 {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-wrap: wrap;
-    gap: 7px 7px;
-    justify-content: center;
-    position: relative;
-}
-
-.community .frame-13 {
-    align-items: center;
-    background-color: #cfcfcf;
-    border-radius: 10.64px;
-    display: inline-flex;
-    flex: 0 0 auto;
-    gap: 1.06px;
-    justify-content: center;
-    padding: 1.06px;
-    position: relative;
-}
-
-.community .img-4 {
-    height: 17.87px;
-    object-fit: cover;
-    position: relative;
-    width: 17.87px;
-}
-
-.community .text-wrapper-5 {
-    color: var(--variable-collection-light-green);
-    font-family: "Poppins-Regular", Helvetica;
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: normal;
-    margin-top: -1.00px;
-    position: relative;
-    width: fit-content;
-}
-
-.community .line {
-    height: 20px;
-    object-fit: cover;
-    position: relative;
-    width: 1px;
-}
-
-.community .text-wrapper-6 {
-    color: var(--dark-grey);
-    font-family: "Poppins-Regular", Helvetica;
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: normal;
-    margin-top: -1.00px;
-    position: relative;
-    width: fit-content;
-}
-
-.community .taking-care-of-your {
-    color: var(--variable-collection-primary-color);
-    font-family: "Instrument Sans-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: normal;
-    position: relative;
-    text-align: justify;
-    width: 874px;
-}
-
-.community .span {
-    color: #38618d;
-    font-weight: 500;
-}
-
-.community .text-wrapper-7 {
-    color: #86daa8;
-    font-family: "Instrument Sans-SemiBold", Helvetica;
-    font-weight: 600;
-}
-
-.community .frame-14 {
-    align-items: flex-start;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    gap: 16px;
-    justify-content: center;
-    position: relative;
-}
-
-.community .thumbnail {
-    height: 437px;
-    position: relative;
-    width: 874px;
-}
-
-.community .frame-15 {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-wrap: wrap;
-    gap: 4px 4px;
-    justify-content: center;
-    position: relative;
-}
-
-.community .text-wrapper-8 {
-    color: #a7a7a7;
-    font-family: "Instrument Sans-Medium", Helvetica;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0;
-    line-height: normal;
-    position: relative;
-    text-align: justify;
-    width: fit-content;
-}
-
-.community .text-wrapper-9 {
-    color: #a7a7a7;
-    font-family: "Poppins-Medium", Helvetica;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0;
-    line-height: normal;
-    margin-top: -1.00px;
-    position: relative;
-    text-align: justify;
-    width: fit-content;
-}
-
-.community .frame-16 {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-wrap: wrap;
-    gap: 522px 522px;
-    justify-content: center;
-    position: relative;
-}
-
-.community .frame-17 {
-    align-items: flex-start;
-    display: inline-flex;
-    flex: 0 0 auto;
-    gap: 24px;
-    position: relative;
-}
-
-.community .img-5 {
-    height: 24px;
-    position: relative;
-    width: 24px;
-}
-
-.community .text-wrapper-10 {
-    color: var(--variable-collection-primary-color);
-    font-family: "Instrument Sans-Medium", Helvetica;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0;
-    line-height: normal;
-    position: relative;
-    text-align: justify;
-    width: fit-content;
-}
-
-.community .overlap-group-wrapper {
-    background-color: var(--variable-collection-faded-blue);
-    border-radius: 15px;
-    height: 825px;
-    left: 1096px;
-    overflow: hidden;
-    position: absolute;
-    top: 126px;
-    width: 377px;
-}
-
-.community .overlap-group {
-    border-radius: 8px;
-    height: 784px;
-    left: 21px;
-    position: relative;
-    top: 18px;
-    width: 336px;
-}
-
-.community .frame-18 {
-    align-items: flex-start;
-    background-color: #ffffff;
-    border-radius: 8px;
-    display: inline-flex;
-    flex-direction: column;
-    gap: 29px;
-    height: 784px;
-    justify-content: center;
-    left: 0;
-    padding: 16px;
-    position: absolute;
-    top: 0;
-}
-
-.community .frame-19 {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 auto;
-    gap: 8px;
-    justify-content: center;
-    position: relative;
-}
-
-.community .text-wrapper-11 {
-    color: var(--variable-collection-primary-color);
-    font-family: "Instrument Sans-Medium", Helvetica;
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 0;
-    line-height: normal;
-    position: relative;
-    width: fit-content;
-}
-
-.community .frame-20 {
-    align-items: flex-start;
-    display: flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    gap: 35px;
-    position: relative;
-    width: 304px;
-}
-
-.community .frame-21 {
-    align-items: center;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-wrap: wrap;
-    gap: 16px 16px;
-    justify-content: center;
-    margin-right: -31.00px;
-    position: relative;
-}
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .community {
+        padding: 10px; /* Less padding on smaller screens */
+    }
 
-.community .frame-22 {
-    flex: 0 0 auto;
-    position: relative;
-}
-
-.community .frame-23 {
-    align-items: flex-start;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    gap: 4px;
-    position: relative;
-}
-
-.community .text-wrapper-12 {
-    color: var(--variable-collection-primary-color);
-    font-family: "Instrument Sans-SemiBold", Helvetica;
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 0;
-    line-height: normal;
-    margin-top: -1.00px;
-    position: relative;
-    width: 228px;
-}
-
-.community .text-wrapper-13 {
-    color: #a7a7a7;
-    font-family: "Instrument Sans-Medium", Helvetica;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0;
-    line-height: normal;
-    position: relative;
-    width: 228px;
-}
-
-.community .frame-24 {
-    align-items: flex-start;
-    display: inline-flex;
-    flex: 0 0 auto;
-    flex-direction: column;
-    gap: 33px;
-    position: relative;
-}
-
-.community .frame-25 {
-    height: 53px;
-    position: relative;
-    width: 53px;
-}
-
-.community .frame-26 {
-    height: 50px;
-    position: relative;
-    width: 50px;
-}
-
-.community .frame-27 {
-    height: 49px;
-    position: relative;
-    width: 49px;
-}
-
-.community .frame-28 {
-    height: 48px;
-    position: relative;
-    width: 48px;
-}
-
-.community .line-2 {
-    height: 1px;
-    left: 17px;
-    position: absolute;
-    top: 164px;
-    width: 297px;
-}
-
-.community .line-3 {
-    height: 1px;
-    left: 17px;
-    position: absolute;
-    top: 256px;
-    width: 297px;
-}
-
-.community .line-4 {
-    height: 1px;
-    left: 16px;
-    position: absolute;
-    top: 340px;
-    width: 297px;
-}
-
-.community .line-5 {
-    height: 1px;
-    left: 16px;
-    position: absolute;
-    top: 426px;
-    width: 297px;
-}
-
-.community .line-6 {
-    height: 1px;
-    left: 16px;
-    position: absolute;
-    top: 508px;
-    width: 297px;
-}
-
-.community .line-7 {
-    height: 1px;
-    left: 16px;
-    position: absolute;
-    top: 590px;
-    width: 297px;
-}
+    .create-post, .post {
+        padding: 15px; /* Less padding inside boxes */
+    }
 
-.community .line-8 {
-    height: 1px;
-    left: 15px;
-    position: absolute;
-    top: 674px;
-    width: 297px;
+    .create-post button, .like-button {
+        width: 100%; /* Full width buttons on small screens */
+    }
 }
-
-
-/* Default Light Mode Styles */
-
-  .settings-container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    color: rgba(56, 97, 141, 1);
-  }
-  
-  /* Dark Mode Styles */
-  .dark-mode {
-    background-color: #121212;
-    color: #e0e0e0;
-  }
-  
-  .dark-mode .settings-container {
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-  }
-  
-  .dark-mode .settings-option button {
-    background-color: rgba(56, 97, 141, 1);
-    color: #ffffff;
-    transition: background-color 0.3s ease;
-  }
-  
-  .dark-mode .settings-option button:hover {
-    background-color: rgba(40, 70, 100, 1);
-  }
-  
-  .dark-mode .logout-button {
-    background-color: #e53935;
-  }
-  
-  .dark-mode .logout-button:hover {
-    background-color: #b71c1c;
-  }
-  
