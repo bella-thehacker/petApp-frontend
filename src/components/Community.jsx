@@ -5,9 +5,9 @@ import "./Community.css";
 export const Community = () => {
     const [posts, setPosts] = useState([]);
     const [newPost, setNewPost] = useState({ title: '', description: '', comment: '', picture: '', gif: '', emoji: '' });
-    const [image, setImage] = useState(null);
 
     useEffect(() => {
+        // Fetch all community posts
         const fetchPosts = async () => {
             try {
                 const response = await axios.get('http://127.0.0.1:7500/community');
@@ -22,23 +22,9 @@ export const Community = () => {
 
     const createPost = async () => {
         try {
-            const formData = new FormData();
-            formData.append('title', newPost.title);
-            formData.append('description', newPost.description);
-            formData.append('comment', newPost.comment);
-            formData.append('picture', image);
-            formData.append('gif', newPost.gif);
-            formData.append('emoji', newPost.emoji);
-
-            const response = await axios.post('http://127.0.0.1:7500/community', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-
-            setPosts([...posts, { ...newPost, id: response.data.post }]);
-            setNewPost({ title: '', description: '', comment: '', picture: '', gif: '', emoji: '' });
-            setImage(null);
+            const response = await axios.post('http://127.0.0.1:7500/community', newPost);
+            setPosts([...posts, { ...newPost, id: response.data.post }]); // Add the new post to the state
+            setNewPost({ title: '', description: '', comment: '', picture: '', gif: '', emoji: '' }); // Reset the form
         } catch (error) {
             console.error("Error creating post:", error);
         }
@@ -47,9 +33,18 @@ export const Community = () => {
     const likePost = async (postId) => {
         try {
             await axios.post(`http://127.0.0.1:7500/community/${postId}/like`);
-            setPosts(posts.map(post => post.id === postId ? { ...post, likes: post.likes + 1 } : post));
+            setPosts(posts.map(post => post.id === postId ? { ...post, likes: post.likes + 1 } : post)); // Update the likes locally
         } catch (error) {
             console.error("Error liking post:", error);
+        }
+    };
+
+    const deletePost = async (postId) => {
+        try {
+            await axios.delete(`http://127.0.0.1:7500/community/${postId}`);
+            setPosts(posts.filter(post => post.id !== postId)); // Remove the deleted post from the state
+        } catch (error) {
+            console.error("Error deleting post:", error);
         }
     };
 
@@ -57,7 +52,7 @@ export const Community = () => {
         <div className="community">
             <h1>Community Posts</h1>
 
-            <div className="create-post">
+            <div>
                 <h2>Create a New Post</h2>
                 <input
                     type="text"
@@ -70,11 +65,6 @@ export const Community = () => {
                     value={newPost.description}
                     onChange={e => setNewPost({ ...newPost, description: e.target.value })}
                 />
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={e => setImage(e.target.files[0])}
-                />
                 <button onClick={createPost}>Submit</button>
             </div>
 
@@ -83,11 +73,9 @@ export const Community = () => {
                     <div key={post.id} className="post">
                         <h3>{post.title}</h3>
                         <p>{post.description}</p>
-                        {post.picture && <img src={post.picture} alt="Post" className="post-image" />}
-                        <div className="post-footer">
-                            <p>{post.likes} Likes</p>
-                            <button className="like-button" onClick={() => likePost(post.id)}>Like</button>
-                        </div>
+                        <p>{post.likes} Likes</p>
+                        <button onClick={() => likePost(post.id)}>Like</button>
+                        <button onClick={() => deletePost(post.id)} style={{ marginLeft: '10px', backgroundColor: '#dc3545' }}>Delete</button>
                     </div>
                 ))}
             </div>

@@ -1,111 +1,109 @@
-.community {
-    max-width: 1200px; /* Limit the width for better readability */
-    margin: 0 auto; /* Center the community section */
-    padding: 20px; /* Add padding around the section */
-    background-color: #f9f9f9; /* Light background color */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+/* Community.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
 }
 
-.community h1 {
-    text-align: center; /* Center the title */
-    color: #333; /* Darker text color for better contrast */
-    margin-bottom: 20px; /* Space below the title */
+.community {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+h2 {
+    margin-top: 20px;
+    color: #444;
 }
 
 .create-post {
-    background-color: #ffffff; /* White background for the post creation area */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 20px; /* Padding inside the box */
-    margin-bottom: 30px; /* Space below the post creation area */
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fafafa;
 }
 
-.create-post h2 {
-    margin-bottom: 15px; /* Space below the subtitle */
-    color: #555; /* Slightly lighter color for subtitles */
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
-.create-post input[type="text"],
-.create-post textarea,
-.create-post input[type="file"] {
-    width: 100%; /* Full width */
-    padding: 10px; /* Padding for comfort */
-    margin-bottom: 15px; /* Space below each input */
-    border: 1px solid #ccc; /* Light border */
-    border-radius: 4px; /* Slightly rounded corners */
-    font-size: 16px; /* Larger font for readability */
+input[type="text"]:focus,
+textarea:focus {
+    border-color: #66afe9;
+    outline: none;
+    box-shadow: 0 0 5px rgba(102, 175, 233, .5);
 }
 
-.create-post button {
-    background-color: #007bff; /* Primary button color */
-    color: white; /* White text */
-    padding: 10px 15px; /* Padding for button */
-    border: none; /* No border */
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease; /* Smooth transition */
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
-.create-post button:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+button:hover {
+    background-color: #218838;
 }
 
 .posts {
-    display: flex; /* Flexbox for layout */
-    flex-direction: column; /* Stack posts vertically */
-    gap: 20px; /* Space between posts */
+    margin-top: 20px;
 }
 
 .post {
-    background-color: #ffffff; /* White background for posts */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 15px; /* Padding inside posts */
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: box-shadow 0.3s;
+}
+
+.post:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .post h3 {
-    margin: 0 0 10px; /* Space below post title */
-    color: #333; /* Dark text for titles */
+    margin: 0 0 10px;
+    color: #333;
 }
 
 .post p {
-    margin: 0 0 10px; /* Space below paragraphs */
-    color: #555; /* Lighter color for body text */
-}
-
-.post-footer {
-    display: flex; /* Flexbox for footer layout */
-    justify-content: space-between; /* Space between likes and button */
-    align-items: center; /* Center vertically */
+    color: #666;
 }
 
 .like-button {
-    background-color: #28a745; /* Green button color */
-    color: white; /* White text */
-    border: none; /* No border */
-    padding: 5px 10px; /* Padding for button */
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease; /* Smooth transition */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
 }
 
 .like-button:hover {
-    background-color: #218838; /* Darker shade on hover */
-}
-
-/* Media Queries for Responsiveness */
-@media (max-width: 768px) {
-    .community {
-        padding: 10px; /* Less padding on smaller screens */
-    }
-
-    .create-post, .post {
-        padding: 15px; /* Less padding inside boxes */
-    }
-
-    .create-post button, .like-button {
-        width: 100%; /* Full width buttons on small screens */
-    }
+    background-color: #0056b3;
 }
