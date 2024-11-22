@@ -981,30 +981,13 @@
 }
 
 /* Dark Mode Styles */
-.dark-mode {
+.dark-mode .div-2 {
   background-color: #121212;
   color: #e0e0e0;
 }
 
-.dark-mode .settings-container {
-  background-color: #1e1e1e;
+.dark-mode .appointments{
+  background-color: #121212;
   color: #e0e0e0;
 }
 
-.dark-mode .settings-option button {
-  background-color: rgba(56, 97, 141, 1);
-  color: #ffffff;
-  transition: background-color 0.3s ease;
-}
-
-.dark-mode .settings-option button:hover {
-  background-color: rgba(40, 70, 100, 1);
-}
-
-.dark-mode .logout-button {
-  background-color: #e53935;
-}
-
-.dark-mode .logout-button:hover {
-  background-color: #b71c1c;
-}
