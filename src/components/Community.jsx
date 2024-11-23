@@ -38,7 +38,9 @@ import "./Community.css";
 
 export const Community = () => {
     return (
+        
         <div className="community">
+        
             <div className="div">
                 
 
