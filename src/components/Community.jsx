@@ -1,165 +1,268 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./Community.css";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import './Community.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export const Community = () => {
-    const [posts, setPosts] = useState([]);
-    const [newPost, setNewPost] = useState({
-        title: '',
-        description: '',
-        comment: '',
-        picture: '',
-        gif: '',
-        emoji: ''
-    });
-    const [editPost, setEditPost] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [newPost, setNewPost] = useState({
+    title: '',
+    description: '',
+    comment: '',
+    picture: '',
+    gif: '',
+    emoji: ''
+  });
+  const [mostLikedPost, setMostLikedPost] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState(''); // 'image', 'emoji', 'comment'
+  const emojis = ['😀', '😂', '😍', '😎', '🥳', '😢', '👍', '👎', '🔥', '❤️'];
 
-    const emojis = ['😀', '😂', '😍', '😎', '🥳', '😢', '👍', '👎', '🔥', '❤️'];
+  // Fetch all posts when the component mounts
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('https://petapp-backend-abg7.onrender.com/community');
+        setPosts(response.data);
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const response = await axios.get('http://127.0.0.1:7500/community');
-                setPosts(response.data);
-            } catch (error) {
-                console.error("Error fetching posts:", error);
-            }
-        };
-        fetchPosts();
-    }, []);
-
-    const createPost = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post('http://127.0.0.1:7500/community', newPost);
-            setPosts([...posts, { ...newPost, id: response.data.post, likes: 0 }]);
-            setNewPost({ title: '', description: '', comment: '', picture: '', gif: '', emoji: '' });
-        } catch (error) {
-            console.error("Error creating post:", error);
-        }
+        // Set most liked post on load
+        const mostLiked = response.data.reduce((prev, current) => {
+          return current.likes > (prev.likes || 0) ? current : prev;
+        }, {});
+        setMostLikedPost(mostLiked);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
     };
+    fetchPosts();
+  }, []);
 
-    const updatePost = async (postId) => {
-        try {
-            const response = await axios.put(`http://127.0.0.1:7500/community/${postId}`, editPost);
-            setPosts(posts.map(post => post.id === postId ? { ...post, ...editPost } : post));
-            setEditPost(null);
-        } catch (error) {
-            console.error("Error updating post:", error);
-        }
-    };
+  // Handle image URL change
+  const handleImageUrlChange = (e) => {
+    setNewPost({ ...newPost, picture: e.target.value });
+  };
 
-    const deletePost = async (postId) => {
-        try {
-            await axios.delete(`http://127.0.0.1:7500/community/${postId}`);
-            setPosts(posts.filter(post => post.id !== postId));
-        } catch (error) {
-            console.error("Error deleting post:", error);
-        }
-    };
+  // Handle GIF file upload
+  const handleGifChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewPost({ ...newPost, gif: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-    const likePost = async (postId) => {
-        try {
-            const response = await axios.post(`http://127.0.0.1:7500/community/${postId}/like`);
-            setPosts(posts.map(post => post.id === postId ? { ...post, likes: response.data.likes } : post));
-        } catch (error) {
-            console.error("Error liking post:", error);
-        }
-    };
+  // Handle emoji click
+  const handleEmojiClick = (emoji) => {
+    setNewPost({ ...newPost, emoji });
+    setShowModal(false); // Close modal after emoji selection
+  };
 
-    return (
-        
-        <div className="community">
+  // Create post
+  const createPost = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('https://petapp-backend-abg7.onrender.com/community', {
+        title: newPost.title,
+        description: newPost.description,
+        comment: newPost.comment,
+        picture: newPost.picture,
+        gif: newPost.gif,
+        emoji: newPost.emoji,
+      });
+      setPosts([...posts, { ...response.data, likes: 0 }]);
+      setNewPost({ title: '', description: '', comment: '', picture: '', gif: '', emoji: '' });
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
+  };
 
-            <h1>Community Posts</h1>
+  // Like post
+  const likePost = async (postId) => {
+    try {
+      const response = await axios.post(`https://petapp-backend-abg7.onrender.com/community/${postId}/like`);
+      const updatedPosts = posts.map((post) =>
+        post.id === postId ? { ...post, likes: response.data.likes } : post
+      );
+      setPosts(updatedPosts);
 
-            <div className="post-form">
-                <h2>Create a New Post</h2>
-                <form onSubmit={createPost}>
-                    <input
-                        type="text"
-                        placeholder="Title"
-                        value={newPost.title}
-                        onChange={e => setNewPost({ ...newPost, title: e.target.value })}
-                        required
-                    />
-                    <textarea
-                        placeholder="Description"
-                        value={newPost.description}
-                        onChange={e => setNewPost({ ...newPost, description: e.target.value })}
-                        required
-                    />
-                    <input
-                        type="text"
-                        placeholder="Comment"
-                        value={newPost.comment}
-                        onChange={e => setNewPost({ ...newPost, comment: e.target.value })}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Picture URL"
-                        value={newPost.picture}
-                        onChange={e => setNewPost({ ...newPost, picture: e.target.value })}
-                    />
-                    <input
-                        type="text"
-                        placeholder="GIF URL"
-                        value={newPost.gif}
-                        onChange={e => setNewPost({ ...newPost, gif: e.target.value })}
-                    />
+      // Update most liked post
+      const updatedMostLiked = updatedPosts.reduce((prev, current) => {
+        return current.likes > (prev.likes || 0) ? current : prev;
+      }, {});
+      setMostLikedPost(updatedMostLiked);
+    } catch (error) {
+      console.error('Error liking post:', error);
+    }
+  };
 
-                    <div className="emoji-picker">
-                        <p>Choose an Emoji:</p>
-                        <div className="emojis">
-                            {emojis.map((emoji, index) => (
-                                <span
-                                    key={index}
-                                    className="emoji"
-                                    onClick={() => setNewPost({ ...newPost, emoji })}
-                                >
-                                    {emoji}
-                                </span>
-                            ))}
+  // Delete post
+  const deletePost = async (postId) => {
+    try {
+      await axios.delete(`https://petapp-backend-abg7.onrender.com/${postId}`);
+      const updatedPosts = posts.filter((post) => post.id !== postId);
+      setPosts(updatedPosts);
 
-                        </div>
-                    </div>
+      // Update most liked post
+      const updatedMostLiked = updatedPosts.reduce((prev, current) => {
+        return current.likes > (prev.likes || 0) ? current : prev;
+      }, {});
+      setMostLikedPost(updatedMostLiked);
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
 
-                    <button type="submit">Submit</button>
-                </form>
-            </div>
+  // Open modal to add content (image, emoji, or comment)
+  const openModal = (type) => {
+    setModalType(type);
+    setShowModal(true);
+  };
 
-            <div className="posts">
-                {posts.map(post => (
-                    <div key={post.id} className="post">
-                        <h3>{post.title}</h3>
-                        <p>{post.description}</p>
-                        <p>Comment: {post.comment}</p>
-                        {post.picture && <img src={post.picture} alt="Post visual" />}
-                        {post.gif && <img src={post.gif} alt="GIF" />}
-                        <p>Emoji: {post.emoji}</p>
-                        <p>{post.likes} Likes</p>
-                        <button onClick={() => likePost(post.id)}>Like</button>
-                        <button onClick={() => deletePost(post.id)} style={{ marginLeft: '10px', backgroundColor: '#dc3545' }}>Delete</button>
-                        <button onClick={() => setEditPost(post)} style={{ marginLeft: '10px', backgroundColor: '#ffc107' }}>Edit</button>
-                        {editPost?.id === post.id && (
-                            <div className="edit-form">
-                                <input
-                                    type="text"
-                                    placeholder="New Title"
-                                    value={editPost.title}
-                                    onChange={e => setEditPost({ ...editPost, title: e.target.value })}
-                                />
-                                <textarea
-                                    placeholder="New Description"
-                                    value={editPost.description}
-                                    onChange={e => setEditPost({ ...editPost, description: e.target.value })}
-                                />
-                                <button onClick={() => updatePost(post.id)}>Save</button>
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div>
+  // Close modal
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  return (
+    <div className="community-page">
+      {/* Left section for posts */}
+      <div className="community-content">
+        <div className="post-create-container">
+          <div className="post-create-header">
+            <img
+              src="https://via.placeholder.com/50" // Replace with user's avatar URL if available
+              alt="User Avatar"
+              className="user-avatar"
+            />
+            <input
+              type="text"
+              placeholder="Post Title"
+              value={newPost.title}
+              onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+              className="post-input"
+            />
+            <input
+              type="text"
+              placeholder="Post Description"
+              value={newPost.description}
+              onChange={(e) => setNewPost({ ...newPost, description: e.target.value })}
+              className="post-input"
+            />
+          </div>
+
+          {/* Action Buttons */}
+          <div className="post-create-actions">
+            <button type="button" className="action-button" onClick={() => openModal('image')}>
+              <i className="fas fa-image"></i>
+            </button>
+            <button type="button" className="action-button" onClick={() => openModal('emoji')}>
+              <i className="fas fa-smile"></i>
+            </button>
+            <button type="button" className="action-button" onClick={() => openModal('comment')}>
+              <i className="fas fa-comment"></i>
+            </button>
+          </div>
+
+          <button onClick={createPost} className="post-submit-button">
+            Post
+          </button>
         </div>
-    );
+
+        <div className="posts">
+          {posts.map((post) => (
+            <div key={post.id} className="post">
+              <h3>{post.title}</h3>
+              <p>{post.description}</p>
+              <p>Comment: {post.comment}</p>
+              {post.picture && <img src={post.picture} alt="Post visual" />}
+              {post.gif && <img src={post.gif} alt="GIF" />}
+              <p>Emoji: {post.emoji}</p>
+              <p>{post.likes} Likes</p>
+
+              {/* Post Actions */}
+              <div className="post-actions">
+                <button onClick={() => likePost(post.id)} className="post-action-btn">
+                  <i className="fas fa-thumbs-up"></i> Like
+                </button>
+                <button onClick={() => openModal('comment')} className="post-action-btn">
+                  <i className="fas fa-comment"></i> Comment
+                </button>
+                <button onClick={() => deletePost(post.id)} className="post-action-btn">
+                  <i className="fas fa-trash-alt"></i> Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right section for most liked post */}
+      <div className="most-liked-section">
+        <h2>Most Liked Post</h2>
+        {mostLikedPost ? (
+          <div className="most-liked-post">
+            <h3>{mostLikedPost.title}</h3>
+            <p>{mostLikedPost.description}</p>
+            <p>Likes: {mostLikedPost.likes}</p>
+            {mostLikedPost.picture && <img src={mostLikedPost.picture} alt="Post visual" />}
+          </div>
+        ) : (
+          <p>No posts available.</p>
+        )}
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <button onClick={closeModal} className="close-modal">X</button>
+
+            {modalType === 'image' && (
+              <div>
+                <h2>Enter Image URL</h2>
+                <input
+                  type="text"
+                  placeholder="Paste an image URL here"
+                  value={newPost.picture}
+                  onChange={handleImageUrlChange}
+                />
+                {newPost.picture && <img src={newPost.picture} alt="Preview" />}
+              </div>
+            )}
+
+            {modalType === 'emoji' && (
+              <div>
+                <h2>Select an Emoji</h2>
+                <div className="emoji-container">
+                  {emojis.map((emoji, index) => (
+                    <button
+                      key={index}
+                      className="emoji-button"
+                      onClick={() => handleEmojiClick(emoji)}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {modalType === 'comment' && (
+              <div>
+                <h2>Leave a Comment</h2>
+                <textarea
+                  placeholder="Write your comment"
+                  value={newPost.comment}
+                  onChange={(e) => setNewPost({ ...newPost, comment: e.target.value })}
+                ></textarea>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
