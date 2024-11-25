@@ -118,6 +118,7 @@ export const Login = () => {
 
               <div className="my-4 text-center text-gray-500">Or continue with</div>
               <div className="flex justify-center space-x-4 mb-4">
+
                 <button className="bg-gray-100  p-2 rounded-full">
                   <img src="/icongoogle.png" alt="Google" className="h-10 " />
                 </button>
@@ -127,6 +128,7 @@ export const Login = () => {
                 <button className="bg-gray-100 p-2 rounded-full">
                   <img src="/iconapple.png" alt="Apple" className="h-10 w-30" />
                 </button>
+
               </div>
 
               <p className="text-center text-sm">
@@ -150,4 +152,6 @@ export const Login = () => {
       </div>
     </div>
   );
+
 };
+
