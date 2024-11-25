@@ -129,7 +129,7 @@ export function Navbar() {
 
         <div className='w-[1px] h-[100px] object-contain flex justify-center mb-30'>
           <NavLink to='/settingsPage'>
-            <IoMdSettings className='w-[100px] h-[100]' />
+            <IoMdSettings className='w-10 h-10 mt-8 mr-40 text-white'  />
           </NavLink>
         </div>
       </div>
