@@ -68,7 +68,9 @@ export const Community = () => {
     };
 
     return (
+        
         <div className="community">
+
             <h1>Community Posts</h1>
 
             <div className="post-form">
@@ -118,6 +120,7 @@ export const Community = () => {
                                     {emoji}
                                 </span>
                             ))}
+
                         </div>
                     </div>
 
