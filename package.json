@@ -11,6 +11,14 @@
     "test": "vitest"
   },
   "dependencies": {
+
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/react": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
+    "@syncfusion/ej2-react-schedule": "^27.2.3",
+
     "axios": "^1.7.7",
     "formik": "^2.4.6",
     "lucide-react": "^0.460.0",
