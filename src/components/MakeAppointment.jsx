@@ -1,19 +1,41 @@
-import React, { useState } from "react";
-import { CiSearch } from "react-icons/ci";
+import React, { useEffect, useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import "./MakeAppointments.css";
 import SuccessMessage from "./SuccessMessage";
 import FailedMessage from "./FailedMessage";
-import "./MakeAppointments.css";
 
 export const MakeAppointment = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [appointment, setAppointment] = useState({
-    vet: "",
-    date: "",
-    time: "",
-  });
+  const [pets, setPets] = useState([]); // Stores pets fetched from the API
   const [appointmentStatus, setAppointmentStatus] = useState(null); // null, "success", or "failed"
-  const [isChecking, setIsChecking] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Fetch pets from the API
+  useEffect(() => {
+    const fetchPets = async () => {
+      const token = localStorage.getItem("access_token"); // Retrieve the access token
+
+      try {
+        const response = await fetch("https://petapp-backend-abg7.onrender.com/pets", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setPets(data);
+        } else {
+          console.error("Failed to fetch pets");
+        }
+      } catch (error) {
+        console.error("Error fetching pets:", error);
+      }
+    };
+    fetchPets();
+  }, []);
 
   // Sample list of vet clinics
   const vetClinics = [
@@ -23,35 +45,52 @@ export const MakeAppointment = () => {
     { id: 4, name: "Canine Wellness Hub", location: "Suburb" },
   ];
 
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
+  // Formik setup
+  const formik = useFormik({
+    initialValues: {
+      pet_id: "",
+      vet: "",
+      type: "Checkup",
+      date: "",
+      time: "",
+      priority: "Medium",
+      notes: "",
+    },
+    validationSchema: Yup.object({
+      pet_id: Yup.string().required("Please select a pet"),
+      vet: Yup.string().required("Vet clinic is required"),
+      date: Yup.string().required("Date is required"),
+      time: Yup.string().required("Time is required"),
+      priority: Yup.string().oneOf(["Low", "Medium", "High"], "Invalid priority"),
+      notes: Yup.string().max(500, "Notes must be 500 characters or less"),
+    }),
+    onSubmit: async (values) => {
+      const token = localStorage.getItem("access_token"); // Retrieve the access token
+      setIsSubmitting(true);
 
-    if (value) {
-      // Filter suggestions based on input
-      const filteredSuggestions = vetClinics.filter((clinic) =>
-        clinic.name.toLowerCase().includes(value.toLowerCase())
-      );
-      setSuggestions(filteredSuggestions);
-    } else {
-      setSuggestions([]);
-    }
-  };
+      try {
+        const response = await fetch("https://petapp-backend-abg7.onrender.com/Appointment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          },
+          body: JSON.stringify(values),
+        });
 
-  const handleMakeAppointment = () => {
-    if (!appointment.vet || !appointment.date || !appointment.time) {
-      alert("Please fill out all fields!");
-      return;
-    }
-
-    setIsChecking(true);
-    setTimeout(() => {
-      // Simulating API response for availability
-      const isAvailable = Math.random() > 0.5; // Random success/fail
-      setIsChecking(false);
-      setAppointmentStatus(isAvailable ? "success" : "failed");
-    }, 2000); // Simulate a 2-second check
-  };
+        if (response.ok) {
+          setAppointmentStatus("success");
+        } else {
+          setAppointmentStatus("failed");
+        }
+      } catch (error) {
+        console.error("Error submitting appointment:", error);
+        setAppointmentStatus("failed");
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+  });
 
   const closeMessage = () => {
     setAppointmentStatus(null);
@@ -61,45 +100,35 @@ export const MakeAppointment = () => {
     <div className="appointment-container">
       <h2>Make an Appointment</h2>
 
-      {/* Search Bar */}
-      <div className="search-bar-container">
-        <input
-          type="text"
-          placeholder="Search for a vet clinic or location"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-        {suggestions.length > 0 && (
-          <div className="autocomplete-dropdown">
-            {suggestions.map((suggestion) => (
-              <div
-                key={suggestion.id}
-                className="autocomplete-item"
-                onClick={() => {
-                  setAppointment({ ...appointment, vet: suggestion.name });
-                  setSearchTerm(suggestion.name);
-                  setSuggestions([]);
-                }}
-              >
-                {suggestion.name} - {suggestion.location}
-              </div>
+      <form onSubmit={formik.handleSubmit}>
+        <label>
+          Select Pet:
+          <select
+            name="pet_id"
+            value={formik.values.pet_id}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          >
+            <option value="">-- Choose a Pet --</option>
+            {pets.map((pet) => (
+              <option key={pet.id} value={pet.id}>
+                {pet.name}
+              </option>
             ))}
-          </div>
-        )}
-      </div>
+          </select>
+          {formik.touched.pet_id && formik.errors.pet_id ? (
+            <div className="error">{formik.errors.pet_id}</div>
+          ) : null}
+        </label>
+        <br />
 
-      <h3 style={{ marginTop: "10px", marginBottom: "10px", color: "rgba(56, 97, 141, 1)" }}>
-        Or
-      </h3>
-
-      {/* Appointment Form */}
-      <form>
         <label>
           Select Vet Clinic:
           <select
             name="vet"
-            value={appointment.vet}
-            onChange={(e) => setAppointment({ ...appointment, vet: e.target.value })}
+            value={formik.values.vet}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           >
             <option value="">-- Choose a Vet --</option>
             {vetClinics.map((clinic) => (
@@ -108,6 +137,21 @@ export const MakeAppointment = () => {
               </option>
             ))}
           </select>
+          {formik.touched.vet && formik.errors.vet ? (
+            <div className="error">{formik.errors.vet}</div>
+          ) : null}
+        </label>
+        <br />
+
+        <label>
+          Appointment Type:
+          <input
+            type="text"
+            name="type"
+            value={formik.values.type}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
         </label>
         <br />
 
@@ -116,9 +160,13 @@ export const MakeAppointment = () => {
           <input
             type="date"
             name="date"
-            value={appointment.date}
-            onChange={(e) => setAppointment({ ...appointment, date: e.target.value })}
+            value={formik.values.date}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
+          {formik.touched.date && formik.errors.date ? (
+            <div className="error">{formik.errors.date}</div>
+          ) : null}
         </label>
         <br />
 
@@ -127,18 +175,47 @@ export const MakeAppointment = () => {
           <input
             type="time"
             name="time"
-            value={appointment.time}
-            onChange={(e) => setAppointment({ ...appointment, time: e.target.value })}
+            value={formik.values.time}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
+          {formik.touched.time && formik.errors.time ? (
+            <div className="error">{formik.errors.time}</div>
+          ) : null}
         </label>
         <br />
 
-        <button
-          type="button"
-          onClick={handleMakeAppointment}
-          disabled={isChecking}
-        >
-          {isChecking ? "Checking Availability..." : "Make Appointment"}
+        <label>
+          Priority:
+          <select
+            name="priority"
+            value={formik.values.priority}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          >
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </label>
+        <br />
+
+        <label>
+          Notes:
+          <textarea
+            name="notes"
+            value={formik.values.notes}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.notes && formik.errors.notes ? (
+            <div className="error">{formik.errors.notes}</div>
+          ) : null}
+        </label>
+        <br />
+
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Submitting..." : "Make Appointment"}
         </button>
       </form>
 
