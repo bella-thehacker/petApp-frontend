@@ -3,6 +3,8 @@ import Calendar from 'react-calendar';
 import './overview.css'
 import './calendar.css';
 import 'react-calendar/dist/Calendar.css'; 
+import { Navbar } from './Navbar';
+
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -43,7 +45,9 @@ export const Overview = () => {
   console.log(value);
 
   return (
+
     <div className='overview-container'>
+
     <div className='bg-[#ffffff] flex flex-row justify-center w-full'>
       <div className='bg-[#ffffff] overflow-hidden w-[1512px] h-[982px] relative'>
         <div className='absolute w-[324px] h-[172px] top-32 left-[412px] bg-variable-collection-fade-minty-green rounded-[10px] overflow-hidden border border-solid border-variable-collection-light-green'>
