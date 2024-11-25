@@ -1,275 +1,268 @@
-import React from "react";
-// import bookmark from "./bookmark.png";
-// import chat from "./chat.png";
-// import chevronRight from "./chevron-right.png";
-// import f8e03b5841d6e2d652e57f51bb74da45Sticker1 from "./f8e03b5841d6e2d652e57f51bb74da45-sticker-1.png";
-// import favorite from "./favorite.png";
-// import frame892 from "./frame-89-2.svg";
-// import frame89 from "./frame-89.svg";
-// import frame902 from "./frame-90-2.svg";
-// import frame90 from "./frame-90.svg";
-// import frame912 from "./frame-91-2.svg";
-// import frame91 from "./frame-91.svg";
-// import frame922 from "./frame-92-2.svg";
-// import frame92 from "./frame-92.svg";
-// import gifBox from "./gif-box.png";
-// import iconamoonSettingsFill from "./iconamoon-settings-fill.svg";
-// import image1 from "./image.png";
-// import image from "./image.svg";
-// import imagesmode from "./imagesmode.png";
-// import lilly1 from "./lilly-1.png";
-// import line15 from "./line-15.svg";
-// import line19 from "./line-19.svg";
-// import line20 from "./line-20.svg";
-// import line21 from "./line-21.svg";
-// import line22 from "./line-22.svg";
-// import line23 from "./line-23.svg";
-// import line24 from "./line-24.svg";
-// import line25 from "./line-25.svg";
-// import logo1 from "./logo-1.png";
-// import mynauiNotificationSolid from "./mynaui-notification-solid.svg";
-// import ouiArrowUp from "./oui-arrow-up.svg";
-// import petPal from "./pet-pal.png";
-// import rectangle10 from "./rectangle-10.png";
-// import sentimentSatisfied from "./sentiment-satisfied.png";
-// import share from "./share.png";
-import "./Community.css";
-// import thumbnail from "./thumbnail.png";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import './Community.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export const Community = () => {
-    return (
-        <div className="community">
-            <div className="div">
-                
+  const [posts, setPosts] = useState([]);
+  const [newPost, setNewPost] = useState({
+    title: '',
+    description: '',
+    comment: '',
+    picture: '',
+    gif: '',
+    emoji: ''
+  });
+  const [mostLikedPost, setMostLikedPost] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState(''); // 'image', 'emoji', 'comment'
+  const emojis = ['😀', '😂', '😍', '😎', '🥳', '😢', '👍', '👎', '🔥', '❤️'];
 
-                <div className="overlap">
-                    <div className="frame-4">
-                        <div className="img-wrapper">
-                            {/* <img
-                                className="img-2"
-                                alt="Img"
-                                src={f8e03b5841d6e2d652e57f51bb74da45Sticker1}
-                            /> */}
-                        </div>
+  // Fetch all posts when the component mounts
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('https://petapp-backend-abg7.onrender.com/community');
+        setPosts(response.data);
 
-                        <div className="frame-5">
-                            <div className="rectangle" />
+        // Set most liked post on load
+        const mostLiked = response.data.reduce((prev, current) => {
+          return current.likes > (prev.likes || 0) ? current : prev;
+        }, {});
+        setMostLikedPost(mostLiked);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+    fetchPosts();
+  }, []);
 
-                            <div className="frame-6">
-                                <p className="p">Connect with people like you</p>
+  // Handle image URL change
+  const handleImageUrlChange = (e) => {
+    setNewPost({ ...newPost, picture: e.target.value });
+  };
 
-                                <div className="frame-7">
-                                    {/* <img className="img-3" alt="Imagesmode" src={imagesmode} />
+  // Handle GIF file upload
+  const handleGifChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewPost({ ...newPost, gif: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-                                    <img className="img-3" alt="Gif box" src={gifBox} />
+  // Handle emoji click
+  const handleEmojiClick = (emoji) => {
+    setNewPost({ ...newPost, emoji });
+    setShowModal(false); // Close modal after emoji selection
+  };
 
-                                    <img
-                                        className="img-3"
-                                        alt="Sentiment satisfied"
-                                        src={sentimentSatisfied}
-                                    /> */}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+  // Create post
+  const createPost = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('https://petapp-backend-abg7.onrender.com/community', {
+        title: newPost.title,
+        description: newPost.description,
+        comment: newPost.comment,
+        picture: newPost.picture,
+        gif: newPost.gif,
+        emoji: newPost.emoji,
+      });
+      setPosts([...posts, { ...response.data, likes: 0 }]);
+      setNewPost({ title: '', description: '', comment: '', picture: '', gif: '', emoji: '' });
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
+  };
 
-                    <div className="frame-wrapper">
-                        <div className="div-wrapper">
-                            <div className="frame-8">
-                                <div className="frame-9">
-                                    <div className="frame-10">
-                                        {/* <img
-                                            className="rectangle-2"
-                                            alt="Rectangle"
-                                            src={rectangle10}
-                                        /> */}
+  // Like post
+  const likePost = async (postId) => {
+    try {
+      const response = await axios.post(`https://petapp-backend-abg7.onrender.com/community/${postId}/like`);
+      const updatedPosts = posts.map((post) =>
+        post.id === postId ? { ...post, likes: response.data.likes } : post
+      );
+      setPosts(updatedPosts);
 
-                                        <div className="frame-11">
-                                            <p className="text-wrapper-4">
-                                                Finding Good Vets in Mombasa
-                                            </p>
+      // Update most liked post
+      const updatedMostLiked = updatedPosts.reduce((prev, current) => {
+        return current.likes > (prev.likes || 0) ? current : prev;
+      }, {});
+      setMostLikedPost(updatedMostLiked);
+    } catch (error) {
+      console.error('Error liking post:', error);
+    }
+  };
 
-                                            <div className="frame-12">
-                                                <div className="frame-13">
-                                                    {/* <img className="img-4" alt="Img" src={image1} /> */}
-                                                </div>
+  // Delete post
+  const deletePost = async (postId) => {
+    try {
+      await axios.delete(`https://petapp-backend-abg7.onrender.com/${postId}`);
+      const updatedPosts = posts.filter((post) => post.id !== postId);
+      setPosts(updatedPosts);
 
-                                                <div className="frame-7">
-                                                    <div className="text-wrapper-5">Sally White</div>
+      // Update most liked post
+      const updatedMostLiked = updatedPosts.reduce((prev, current) => {
+        return current.likes > (prev.likes || 0) ? current : prev;
+      }, {});
+      setMostLikedPost(updatedMostLiked);
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
 
-                                                    {/* <img className="line" alt="Line" src={line15} /> */}
+  // Open modal to add content (image, emoji, or comment)
+  const openModal = (type) => {
+    setModalType(type);
+    setShowModal(true);
+  };
 
-                                                    <div className="text-wrapper-6">1 day ago</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+  // Close modal
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
-                                    <p className="taking-care-of-your">
-                                        <span className="span">
-                                            Taking care of your furry, feathery, or scaly friend
-                                            involves finding a reliable veterinarian. Nairobi boasts a
-                                            growing number of veterinary services{" "}
-                                        </span>
+  return (
+    <div className="community-page">
+      {/* Left section for posts */}
+      <div className="community-content">
+        <div className="post-create-container">
+          <div className="post-create-header">
+            <img
+              src="https://via.placeholder.com/50" // Replace with user's avatar URL if available
+              alt="User Avatar"
+              className="user-avatar"
+            />
+            <input
+              type="text"
+              placeholder="Post Title"
+              value={newPost.title}
+              onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+              className="post-input"
+            />
+            <input
+              type="text"
+              placeholder="Post Description"
+              value={newPost.description}
+              onChange={(e) => setNewPost({ ...newPost, description: e.target.value })}
+              className="post-input"
+            />
+          </div>
 
-                                        <span className="text-wrapper-7">...view more</span>
-                                    </p>
-                                </div>
+          {/* Action Buttons */}
+          <div className="post-create-actions">
+            <button type="button" className="action-button" onClick={() => openModal('image')}>
+              <i className="fas fa-image"></i>
+            </button>
+            <button type="button" className="action-button" onClick={() => openModal('emoji')}>
+              <i className="fas fa-smile"></i>
+            </button>
+            <button type="button" className="action-button" onClick={() => openModal('comment')}>
+              <i className="fas fa-comment"></i>
+            </button>
+          </div>
 
-                                <div className="frame-14">
-                                    {/* <img className="thumbnail" alt="Thumbnail" src={thumbnail} /> */}
-
-                                    <div className="frame-15">
-                                        <div className="text-wrapper-8">182 likes</div>
-
-                                        <div className="text-wrapper-9">·</div>
-
-                                        <div className="text-wrapper-8">21 comments</div>
-                                    </div>
-
-                                    <div className="frame-16">
-                                        <div className="frame-17">
-                                            <div className="frame-7">
-                                                {/* <img className="img-5" alt="Favorite" src={favorite} /> */}
-
-                                                <div className="text-wrapper-10">Like</div>
-                                            </div>
-
-                                            <div className="frame-7">
-                                                {/* <img className="img-5" alt="Chat" src={chat} /> */}
-
-                                                <div className="text-wrapper-10">Comment</div>
-                                            </div>
-
-                                            <div className="frame-7">
-                                                {/* <img className="img-5" alt="Bookmark" src={bookmark} /> */}
-
-                                                <div className="text-wrapper-10">Save</div>
-                                            </div>
-                                        </div>
-
-                                        <div className="frame-7">
-                                            {/* <img className="img-5" alt="Share" src={share} /> */}
-
-                                            <div className="text-wrapper-10">Share</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="overlap-group-wrapper">
-                    <div className="overlap-group">
-                        <div className="frame-18">
-                            <div className="frame-19">
-                                <div className="text-wrapper-11">Popular Tags</div>
-
-                                {/* <img className="img-5" alt="Chevron right" src={chevronRight} /> */}
-                            </div>
-
-                            <div className="frame-20">
-                                <div className="frame-21">
-                                    {/* <img className="frame-22" alt="Frame" src={frame92} /> */}
-
-                                    <div className="frame-23">
-                                        <div className="text-wrapper-12">#catmom</div>
-
-                                        <p className="text-wrapper-13">98,323 posted by this tag</p>
-                                    </div>
-                                </div>
-
-                                <div className="frame-10">
-                                    {/* <img className="frame-22" alt="Frame" src={frame91} /> */}
-
-                                    <div className="frame-23">
-                                        <div className="text-wrapper-12">#doggydayout</div>
-
-                                        <p className="text-wrapper-13">98,323 posted by this tag</p>
-                                    </div>
-                                </div>
-
-                                <div className="frame-10">
-                                    {/* <img className="frame-22" alt="Frame" src={frame90} /> */}
-
-                                    <div className="frame-23">
-                                        <div className="text-wrapper-12">#petlovers</div>
-
-                                        <p className="text-wrapper-13">98,323 posted by this tag</p>
-                                    </div>
-                                </div>
-
-                                <div className="frame-10">
-                                    {/* <img className="img" alt="Frame" src={frame89} /> */}
-
-                                    <div className="frame-23">
-                                        <div className="text-wrapper-12">#petpal</div>
-
-                                        <p className="text-wrapper-13">98,323 posted by this tag</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="frame-24">
-                                <div className="frame-10">
-                                    {/* <img className="frame-25" alt="Frame" src={frame922} /> */}
-
-                                    <div className="frame-23">
-                                        <div className="text-wrapper-12">#Vetsinnairobi</div>
-
-                                        <p className="text-wrapper-13">98,323 posted by this tag</p>
-                                    </div>
-                                </div>
-
-                                <div className="frame-10">
-                                    {/* <img className="frame-26" alt="Frame" src={frame912} /> */}
-
-                                    <div className="frame-23">
-                                        <div className="text-wrapper-12">#Vetsnearme</div>
-
-                                        <p className="text-wrapper-13">98,323 posted by this tag</p>
-                                    </div>
-                                </div>
-
-                                <div className="frame-10">
-                                    {/* <img className="frame-27" alt="Frame" src={frame902} /> */}
-
-                                    <div className="frame-23">
-                                        <div className="text-wrapper-12">#Dogshow</div>
-
-                                        <p className="text-wrapper-13">98,323 posted by this tag</p>
-                                    </div>
-                                </div>
-
-                                <div className="frame-10">
-                                    {/* <img className="frame-28" alt="Frame" src={frame892} /> */}
-
-                                    <div className="frame-23">
-                                        <div className="text-wrapper-12">#Catsitter</div>
-
-                                        <p className="text-wrapper-13">98,323 posted by this tag</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> {/* <img className="line-2" alt="Line" src={line19} />
-
-                        <img className="line-3" alt="Line" src={line20} />
-
-                        <img className="line-4" alt="Line" src={line21} />
-
-                        <img className="line-5" alt="Line" src={line22} />
-
-                        <img className="line-6" alt="Line" src={line23} />
-
-                        <img className="line-7" alt="Line" src={line24} />
-
-                        <img className="line-8" alt="Line" src={line25} />
-
-                        */}
-                    </div>
-                </div>
-            </div>
+          <button onClick={createPost} className="post-submit-button">
+            Post
+          </button>
         </div>
-    );
+
+        <div className="posts">
+          {posts.map((post) => (
+            <div key={post.id} className="post">
+              <h3>{post.title}</h3>
+              <p>{post.description}</p>
+              <p>Comment: {post.comment}</p>
+              {post.picture && <img src={post.picture} alt="Post visual" />}
+              {post.gif && <img src={post.gif} alt="GIF" />}
+              <p>Emoji: {post.emoji}</p>
+              <p>{post.likes} Likes</p>
+
+              {/* Post Actions */}
+              <div className="post-actions">
+                <button onClick={() => likePost(post.id)} className="post-action-btn">
+                  <i className="fas fa-thumbs-up"></i> Like
+                </button>
+                <button onClick={() => openModal('comment')} className="post-action-btn">
+                  <i className="fas fa-comment"></i> Comment
+                </button>
+                <button onClick={() => deletePost(post.id)} className="post-action-btn">
+                  <i className="fas fa-trash-alt"></i> Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right section for most liked post */}
+      <div className="most-liked-section">
+        <h2>Most Liked Post</h2>
+        {mostLikedPost ? (
+          <div className="most-liked-post">
+            <h3>{mostLikedPost.title}</h3>
+            <p>{mostLikedPost.description}</p>
+            <p>Likes: {mostLikedPost.likes}</p>
+            {mostLikedPost.picture && <img src={mostLikedPost.picture} alt="Post visual" />}
+          </div>
+        ) : (
+          <p>No posts available.</p>
+        )}
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <button onClick={closeModal} className="close-modal">X</button>
+
+            {modalType === 'image' && (
+              <div>
+                <h2>Enter Image URL</h2>
+                <input
+                  type="text"
+                  placeholder="Paste an image URL here"
+                  value={newPost.picture}
+                  onChange={handleImageUrlChange}
+                />
+                {newPost.picture && <img src={newPost.picture} alt="Preview" />}
+              </div>
+            )}
+
+            {modalType === 'emoji' && (
+              <div>
+                <h2>Select an Emoji</h2>
+                <div className="emoji-container">
+                  {emojis.map((emoji, index) => (
+                    <button
+                      key={index}
+                      className="emoji-button"
+                      onClick={() => handleEmojiClick(emoji)}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {modalType === 'comment' && (
+              <div>
+                <h2>Leave a Comment</h2>
+                <textarea
+                  placeholder="Write your comment"
+                  value={newPost.comment}
+                  onChange={(e) => setNewPost({ ...newPost, comment: e.target.value })}
+                ></textarea>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };

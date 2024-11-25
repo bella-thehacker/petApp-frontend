@@ -1,117 +1,157 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-// import deviconApple from "./devicon-apple.svg";
-// import flatColorIconsGoogle from "./flat-color-icons-google.svg";
-// import layer11 from "./layer-1-1.png";
-// import line1 from "./line-1.png";
-// import logosMetaIcon from "./logos-meta-icon.svg";
-// import petPal from "./pet-pal.png";
-// import rectangle8 from "./rectangle-8.svg";
-// import rectangle from "./rectangle.png";
+import React, { useState, useEffect } from "react";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
+
+// Validation Schema
+const LoginSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string().required("Password is required"),
+});
 
 export const Login = () => {
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
+  const navigate = useNavigate(); // Navigate hook to redirect after login
+
+  // Get email from localStorage (if exists) on component mount
+  const storedEmail = localStorage.getItem("email") || "";
+
+  const handleLogin = (values, { setSubmitting, setErrors }) => {
+    setShowLoading(true);
+
+    fetch("https://petapp-backend-abg7.onrender.com/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Login failed. Please check your credentials.");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        localStorage.setItem("token", data.access_token);
+
+        setTimeout(() => {
+          setShowLoading(false);
+          setShowSuccessPopup(true);
+          // Redirect to the Add Pet page after successful login
+          navigate("/addpet"); // Redirect to Add Pet page
+        }, 250);
+      })
+      .catch((error) => {
+        setErrors({ password: "Login failed. Please try again." });
+        setShowLoading(false);
+      })
+      .finally(() => setSubmitting(false));
+  };
+
   return (
-    <div className="bg-[#86daa8] flex flex-row justify-center w-full h-[100vh]">
-      <div className="bg-variable-collection-light-green w-[1512px] h-[982px] relative">
-        <div className="absolute w-[585px] h-[690px] top-[146px] left-[140px] bg-white rounded-[30px] shadow-[0px_1px_3px_#0000001a]">
-          {/* <img
-            className="absolute w-[37px] h-1.5 top-[162px] left-[62px]"
-            alt="Rectangle"
-            src={rectangle}
-          /> */}
-
-          <div className="absolute w-[105px] top-[329px] left-[416px] [font-family:'Instrument_Sans-SemiBold',Helvetica] font-semibold text-variable-collection-primary-color text-xs text-center tracking-[0] leading-[normal]">
-            Forget Password?
-          </div>
-
-          <div className="absolute w-[464px] h-[45px] top-[270px] left-14">
-            <div className="relative w-[462px] h-[45px] bg-greyish rounded-lg border border-solid border-dark-grey">
-              <div className="absolute w-[88px] top-3 left-3.5 [font-family:'Instrument_Sans-SemiBold',Helvetica] font-semibold text-purple-fade text-sm tracking-[0] leading-[normal]">
-                Password
+    <div className="flex h-screen bg-green-200">
+      {/* Left Section */}
+      <div className="w-1/2 flex items-center justify-center">
+        <Formik
+          initialValues={{ email: storedEmail, password: "" }} // Autofill email if available in localStorage
+          validationSchema={LoginSchema}
+          onSubmit={handleLogin}
+        >
+          {({ errors, touched, isSubmitting }) => (
+            <Form className="bg-white p-8 rounded-lg shadow-lg w-3/4">
+              <div className="text-center mb-6">
+                <h1 className="text-2xl font-bold text-gray-800">PetPal</h1>
+                <p className="text-gray-600">Log In</p>
               </div>
-            </div>
-          </div>
 
-          <div className="absolute w-[464px] h-[45px] top-[195px] left-14">
-            <div className="relative w-[462px] h-[45px] bg-greyish rounded-lg border border-solid border-dark-grey">
-              <p className="absolute w-[265px] top-[13px] left-[13px] [font-family:'Instrument_Sans-SemiBold',Helvetica] font-semibold text-purple-fade text-sm tracking-[0] leading-[normal]">
-                Email address / Phone No. / Username
+              {/* Email Field */}
+              <div className="mb-4">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email address
+                </label>
+                <Field
+                  name="email"
+                  type="text"
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+                {errors.email && touched.email ? (
+                  <div className="text-red-500 text-sm">{errors.email}</div>
+                ) : null}
+              </div>
+
+              {/* Password Field */}
+              <div className="mb-4">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password
+                </label>
+                <Field
+                  name="password"
+                  type="password"
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+                {errors.password && touched.password ? (
+                  <div className="text-red-500 text-sm">{errors.password}</div>
+                ) : null}
+              </div>
+
+              <div className="mb-4 text-right">
+                <a href="#" className="text-sm text-blue-600 hover:underline">
+                  Forgot Password?
+                </a>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200"
+              >
+                {isSubmitting ? "Logging in..." : "Log in"}
+              </button>
+
+              <div className="my-4 text-center text-gray-500">Or continue with</div>
+              <div className="flex justify-center space-x-4 mb-4">
+
+                <button className="bg-gray-100  p-2 rounded-full">
+                  <img src="/icongoogle.png" alt="Google" className="h-10 " />
+                </button>
+                <button className="bg-gray-100 p-2 rounded-full">
+                  <img src="/iconmeta.png" alt="Facebook" className="h-10 w-30" />
+                </button>
+                <button className="bg-gray-100 p-2 rounded-full">
+                  <img src="/iconapple.png" alt="Apple" className="h-10 w-30" />
+                </button>
+
+              </div>
+
+              <p className="text-center text-sm">
+                Don't have an account?{" "}
+                <a href="/signup" className="text-blue-600 hover:underline">
+                  Sign up
+                </a>
               </p>
-            </div>
-          </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
 
-          <div className="absolute top-[405px] left-20 [font-family:'Instrument_Sans-Regular',Helvetica] font-normal text-variable-collection-primary-color text-base tracking-[0] leading-[normal]">
-            Or continue with
-          </div>
-
-          <p className="absolute top-[646px] left-[184px] [font-family:'Instrument_Sans-Regular',Helvetica] font-normal text-[#797878] text-sm tracking-[0] leading-[normal] underline">
-          <a href="/signup">Don't have an account? Sign up</a>
-            
-          </p>
-
-          {/* <img
-            className="absolute w-[304px] h-px top-[414px] left-[214px]"
-            alt="Line"
-            src={line1}
-          /> */}
-
-          <div className="absolute w-[131px] h-[67px] top-[461px] left-20 bg-[#f7f7f7] rounded-[10px]">
-            {/* <img
-              className="absolute w-[39px] h-[39px] top-3.5 left-[46px]"
-              alt="Flat color icons"
-              src={flatColorIconsGoogle}
-            /> */}
-          </div>
-
-          <div className="absolute w-[136px] h-[71px] top-[457px] left-[232px] bg-[#f7f7f7] rounded-[10px]">
-            {/* <img
-              className="absolute w-[46px] h-[30px] top-[21px] left-[45px]"
-              alt="Logos meta icon"
-              src={logosMetaIcon}
-            /> */}
-          </div>
-
-          <div className="absolute w-[137px] h-[71px] top-[457px] left-[383px] bg-[#f7f7f7] rounded-[10px]">
-            {/* <img
-              className="absolute w-[35px] h-[35px] top-4 left-[51px]"
-              alt="Devicon apple"
-              src={deviconApple}
-            /> */}
-          </div>
-
-          <div className="absolute w-[314px] h-[62px] top-[575px] left-[136px]">
-            <div className="relative w-[312px] h-[62px] bg-[#39628e] rounded-lg">
-              <div className="absolute top-4 left-[123px] [font-family:'Instrument_Sans-Regular',Helvetica] font-normal text-white text-2xl tracking-[0] leading-[normal]">
-                <a href="/addpet">Log in</a>
-              </div>
-            </div>
-          </div>
-
-          <div className="absolute top-[126px] left-16 [font-family:'Instrument_Sans-SemiBold',Helvetica] font-semibold text-variable-collection-primary-color text-2xl text-center tracking-[0.23px] leading-[normal]">
-            Log In
-          </div>
-
-          <div className="absolute w-[120px] h-12 top-[63px] left-14">
-            {/* <img
-              className="absolute w-[71px] h-[17px] top-[18px] left-[49px]"
-              alt="Pet pal"
-              src={petPal}
-            /> */}
-
-            {/* <img
-              className="absolute w-[47px] h-12 top-0 left-0 object-cover"
-              alt="Layer"
-              src={layer11}
-            /> */}
-          </div>
-        </div>
-
+      {/* Right Section */}
+      <div className="w-1/2 bg-yellow-400 flex items-center justify-center">
         <img
-          className="absolute w-[595px] h-[902px] top-[34px] left-[877px] rounded-lg "
-          alt="Rectangle"
-          src='/log.png'
+          src="/log.png"
+          alt="Pug"
+          className="w-2/3 rounded-lg shadow-lg"
         />
       </div>
     </div>
   );
+
 };
+

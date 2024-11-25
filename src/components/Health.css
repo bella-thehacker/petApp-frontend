@@ -1121,3 +1121,43 @@
     position: relative;
     width: 55px;
 }
+
+/* Default Light Mode Styles */
+
+.dark-mode .health{
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+
+  .dark-mode .div{
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+ 
+  .dark-mode .health-overview{
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+
+  .dark-mode .frame-7{
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+
+  .dark-mode .frame-23{
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+
+  .dark-mode .frame-14{
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+  
+  
+  
+ 
+  
+  .dark-mode .overview-item:hover {
+    background-color: #2e2e2e;
+  }

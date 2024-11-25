@@ -1,4 +1,17 @@
-import React from 'react'
+import { useState } from 'react';
+import Calendar from 'react-calendar';
+import './overview.css'
+import './calendar.css';
+import 'react-calendar/dist/Calendar.css'; 
+import { Navbar } from './Navbar';
+
+
+type ValuePiece = Date | null;
+type Value = ValuePiece | [ValuePiece, ValuePiece];
+
+
+
+
 // import { AtomsDeyNumber } from './AtomsDeyNumber'
 // import { AtomsWeekDey } from './AtomsWeekDey'
 // import carbonReminder from './carbon-reminder.svg'
@@ -26,7 +39,15 @@ import React from 'react'
 // import petPal from './pet-pal.png'
 
 export const Overview = () => {
+  
+
+  const [value, onChange] = useState<Value>(new Date());
+  console.log(value);
+
   return (
+
+    <div className='overview-container'>
+
     <div className='bg-[#ffffff] flex flex-row justify-center w-full'>
       <div className='bg-[#ffffff] overflow-hidden w-[1512px] h-[982px] relative'>
         <div className='absolute w-[324px] h-[172px] top-32 left-[412px] bg-variable-collection-fade-minty-green rounded-[10px] overflow-hidden border border-solid border-variable-collection-light-green'>
@@ -264,9 +285,9 @@ export const Overview = () => {
         </div>
 
         <div className='flex flex-col w-[696px] h-[631px] items-center gap-8 px-5 py-[31px] absolute top-[323px] left-[784px] bg-white rounded-[10px] border border-solid border-variable-collection-primary-color'>
-          <div className='relative w-[201px] h-[26px]'>
-            <div className="absolute w-[104px] h-[26px] top-0 left-[42px] [font-family:'Lato-SemiBold',Helvetica] font-semibold text-variable-collection-primary-color text-xl text-center tracking-[0] leading-[normal]">
-              December
+          <div className='calendar-div'>
+            <div className="calendar-div1">
+            <Calendar onChange={onChange} value={value} />
             </div>
             {/* 
             <img
@@ -774,6 +795,7 @@ export const Overview = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

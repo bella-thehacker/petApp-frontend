@@ -1,58 +1,45 @@
-/* .navbar {
-  display: flex;
-  justify-content: center;
+/* Default Light Mode Styles */
 
-  flex: 0 0 auto;
-  gap: 82px;
-  position: relative;
+
+.settings-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: rgba(56, 97, 141, 1);
 }
 
-.text-wrapper-36 {
-  color: var(--variable-collection-faded-blue);
-  font-family: "Instrument Sans-SemiBold", Helvetica;
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: 0;
-  line-height: normal;
-  width: fit-content;
+/* Dark Mode Styles */
+.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
 }
 
-.text-wrapper-37 {
-  color: var(--variable-collection-light-green);
-  font-family: "Instrument Sans-SemiBold", Helvetica;
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: 0;
-  line-height: normal;
-  width: fit-content;
+.dark-mode .settings-container {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
 }
 
-.frame-26 {
-  align-items: center;
-  align-self: stretch;
-  display: flex;
-  flex: 0 0 auto;
-  gap: 131px;
-  position: relative;
-  width: 100%;
+.dark-mode .settings-option button {
+  background-color: rgba(56, 97, 141, 1);
+  color: #ffffff;
+  transition: background-color 0.3s ease;
 }
 
-.menu {
-  align-items: flex-start;
-  background-color: var(--variable-collection-primary-color);
-
-  gap: 10px;
-
-  padding: 10px 20px;
-
-  top: 0;
+.dark-mode .settings-option button:hover {
+  background-color: rgba(40, 70, 100, 1);
 }
 
-.group-2 {
-  height: 64.49px;
-  position: relative;
-  width: 169.64px;
-} */
+.dark-mode .logout-button {
+  background-color: #e53935;
+}
+
+.dark-mode .logout-button:hover {
+  background-color: #b71c1c;
+}
+
 
 
 .navbar {

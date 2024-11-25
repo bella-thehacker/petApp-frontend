@@ -1,298 +1,192 @@
-import React from "react";
-// import bxCheckbox from "./bx-checkbox.svg";
-// import fluentIosArrow24Filled2 from "./fluent-ios-arrow-24-filled-2.svg";
-// import fluentIosArrow24Filled from "./fluent-ios-arrow-24-filled.svg";
-// import frame14 from "./frame-14.svg";
-// import hugeiconsCancel012 from "./hugeicons-cancel-01-2.svg";
-// import hugeiconsCancel013 from "./hugeicons-cancel-01-3.svg";
-// import hugeiconsCancel01 from "./hugeicons-cancel-01.svg";
-// import image from "./image.svg";
-// import vector2 from "./vector-2.svg";
-// import vector from "./vector.svg";
+import React, { useState } from "react";
 
 export const AddPet = () => {
+  const [petDetails, setPetDetails] = useState({
+    name: "",
+    type: "",
+    breed: "",
+    gender: "",
+    dob: "", // Ensure this starts as an empty string
+  });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setPetDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission
+    setLoading(true); // Set loading to true when the request starts
+    setMessage(""); // Clear previous messages
+
+    const token = localStorage.getItem("tokens"); // Retrieve token from local storage
+    const petData = {
+      name: petDetails.name,
+      type: petDetails.type,
+      breed: petDetails.breed,
+      gender: petDetails.gender,
+      date_of_birth: petDetails.dob, // Ensure the date is in YYYY-MM-DD format
+    };
+
+    try {
+      const response = await fetch("/pets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, 
+        },
+        body: JSON.stringify(petData),
+      });
+
+      // Check if the response is successful
+      if (!response.ok) {
+        throw new Error("Failed to add pet, please try again");
+      }
+
+      const data = await response.json();
+      setMessage("Pet added successfully!"); // Set success message
+      console.log("Response data:", data); // Log the response data
+
+      // Optional: Reset form fields after submission
+      setPetDetails({
+        name: "",
+        type: "",
+        breed: "",
+        gender: "",
+        dob: "",
+      });
+    } catch (error) {
+      setMessage(`Error: ${error.message}`); // Set error message
+    } finally {
+      setLoading(false); // Set loading to false when the request is complete
+    }
+  };
+
   return (
     <div className="bg-[#deefdf] flex flex-row justify-center w-full">
       <div className="bg-[#deefdf] w-[1512px] h-[1489px]">
-        <div className="relative w-[1361px] h-[1344px] top-[68px] left-16 bg-[#ffffff] rounded-[10px] shadow-[0px_1px_3px_#0000001a]">
+        <form
+          onSubmit={handleSubmit}
+          className="relative w-[1361px] h-[1344px] top-[68px] left-16 bg-[#ffffff] rounded-[10px] shadow-[0px_1px_3px_#0000001a]"
+        >
           <div className="flex flex-col w-[1133px] items-start gap-[33px] absolute top-[72px] left-[67px]">
             <div className="relative self-stretch mt-[-1.00px] font-sub-heading font-[number:var(--sub-heading-font-weight)] text-[#39628e] text-[length:var(--sub-heading-font-size)] tracking-[var(--sub-heading-letter-spacing)] leading-[var(--sub-heading-line-height)] [font-style:var(--sub-heading-font-style)]">
               Add Pet Details
             </div>
 
+            {message && <div className="text-center text-red-500">{message}</div>}
+
             <div className="flex items-start gap-[173px] relative self-stretch w-full flex-[0_0_auto]">
               <div className="flex flex-col w-[480px] items-start gap-[37px] relative">
                 <div className="gap-[18px] self-stretch w-full flex flex-col items-start relative flex-[0_0_auto]">
-                  <div className="relative self-stretch mt-[-1.00px] font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
+                  <label className="relative self-stretch mt-[-1.00px] font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
                     Pet’s Name
-                  </div>
-
-                  <div className="flex h-[45px] items-center gap-2.5 p-3.5 relative self-stretch w-full bg-greyish rounded-[10px] border border-solid border-[#b3b3b3]">
-                    <div className="relative w-fit mt-[-1.50px] font-small-body font-[number:var(--small-body-font-weight)] text-[#90a0b7] text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                      Enter Pet’s Name
-                    </div>
-                  </div>
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Enter Pet’s Name"
+                    value={petDetails.name}
+                    onChange={handleChange}
+                    className="flex h-[45px] items-center p-3 relative self-stretch w-full bg-greyish rounded-[10px] border border-solid border-[#b3b3b3] text-[#90a0b7]"
+                  />
                 </div>
 
                 <div className="gap-3.5 self-stretch w-full flex flex-col items-start relative flex-[0_0_auto]">
-                  <div className="relative self-stretch mt-[-1.00px] font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
+                  <label className="relative self-stretch mt-[-1.00px] font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
                     Pet’s Breed
-                  </div>
-
-                  <div className="flex items-center gap-2.5 px-3.5 py-3 relative self-stretch w-full border-dark-grey h-[45px] bg-greyish rounded-lg border border-solid">
-                    <div className="relative w-fit font-small-body font-[number:var(--small-body-font-weight)] text-purple-fade text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                      Breed
-                    </div>
-                  </div>
+                  </label>
+                  <input
+                    type="text"
+                    name="breed"
+                    placeholder="Breed"
+                    value={petDetails.breed}
+                    onChange={handleChange}
+                    className="flex h-[45px] items-center p-3 relative self-stretch w-full border-dark-grey h-[45px] bg-greyish rounded-lg border border-solid text-purple-fade"
+                  />
                 </div>
 
                 <div className="relative self-stretch w-full h-[88px]">
-                  <div className="absolute w-[480px] -top-px left-0 font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
+                  <label className="absolute w-[480px] -top-px left-0 font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
                     Date of Birth
-                  </div>
-
-                  <div className="absolute w-[480px] h-[45px] top-[43px] left-0 bg-greyish rounded-lg border border-solid border-dark-grey">
-                    <div className="absolute top-3 left-3.5 font-small-body font-[number:var(--small-body-font-weight)] text-purple-fade text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                      24/12/2024
-                    </div>
-
-                    {/* <img
-                      className="absolute w-[26px] h-[29px] top-[7px] left-[441px]"
-                      alt="Vector"
-                      src={vector}
-                    /> */}
-                  </div>
+                  </label>
+                  <input
+                    type="date"
+                    name="dob"
+                    value={petDetails.dob || ""} // Ensure it's an empty string if dob is undefined
+                    onChange={handleChange}
+                    className="absolute w-[480px] h-[45px] top-[43px] left-0 bg-greyish rounded-lg border border-solid border-dark-grey"
+                  />
                 </div>
               </div>
 
               <div className="flex flex-col w-[480px] items-start gap-[41px] relative">
                 <div className="gap-[18px] self-stretch w-full flex flex-col items-start relative flex-[0_0_auto]">
-                  <div className="relative self-stretch mt-[-1.00px] font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
+                  <label className="relative self-stretch mt-[-1.00px] font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
                     Pet Type
-                  </div>
-
-                  <div className="relative self-stretch w-full h-[45px] bg-greyish rounded-lg border border-solid border-dark-grey">
-                    <p className="absolute top-[13px] left-3.5 font-small-body font-[number:var(--small-body-font-weight)] text-[#90a0b7] text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                      Enter what type of pet it is e.g. cat, dog, rabbit
-                    </p>
-
-                    {/* <img
-                      className="absolute w-7 h-7 top-[3px] left-[438px]"
-                      alt="Fluent ios arrow"
-                      src={fluentIosArrow24Filled}
-                    /> */}
-                  </div>
+                  </label>
+                  <input
+                    type="text"
+                    name="type"
+                    placeholder="Enter what type of pet it is e.g. cat, dog, rabbit"
+                    value={petDetails.type}
+                    onChange={handleChange}
+                    className="flex h-[45px] items-center px-3.5 py-3 relative self-stretch w-full bg-greyish rounded-lg border border-solid border-dark-grey"
+                  />
                 </div>
 
                 <div className="w-[323px] gap-[15px] flex flex-col items-start relative flex-[0_0_auto]">
-                  <div className="relative self-stretch mt-[-1.00px] font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
+                  <label className="relative self-stretch mt-[-1.00px] font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
                     Pet’s Gender
-                  </div>
-
+                  </label>
                   <div className="flex items-center gap-[71px] relative self-stretch w-full flex-[0_0_auto]">
-                    <div className="inline-flex items-center gap-[22px] relative flex-[0_0_auto]">
-                      {/* <img
-                        className="relative w-9 h-9"
-                        alt="Frame"
-                        src={frame14}
-                      /> */}
-
-                      <div className="relative w-fit font-body font-[number:var(--body-font-weight)] text-variable-collection-primary-color text-[length:var(--body-font-size)] tracking-[var(--body-letter-spacing)] leading-[var(--body-line-height)] [font-style:var(--body-font-style)]">
+                    <label className="inline-flex items-center gap-[22px] relative flex-[0_0_auto]">
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="male"
+                        checked={petDetails.gender === "male"}
+                        onChange={handleChange}
+                        className="w-5 h-5"
+                      />
+                      <span className="relative w-fit font-body font-[number:var(--body-font-weight)] text-variable-collection-primary-color text-[length:var(--body-font-size)] tracking-[var(--body-letter-spacing)] leading-[var(--body-line-height)] [font-style:var(--body-font-style)]">
                         Male
-                      </div>
-                    </div>
-
-                    <div className="inline-flex items-center gap-[22px] relative flex-[0_0_auto]">
-                      <div className="relative w-9 h-9 bg-greyish rounded-lg border border-solid border-dark-grey" />
-
-                      <div className="relative w-fit font-body font-[number:var(--body-font-weight)] text-variable-collection-primary-color text-[length:var(--body-font-size)] tracking-[var(--body-letter-spacing)] leading-[var(--body-line-height)] [font-style:var(--body-font-style)]">
+                      </span>
+                    </label>
+                    <label className="inline-flex items-center gap-[22px] relative flex-[0_0_auto]">
+                      <input
+                        type="radio"
+                        name="gender"
+                        value="female"
+                        checked={petDetails.gender === "female"}
+                        onChange={handleChange}
+                        className="w-5 h-5"
+                      />
+                      <span className="relative w-fit font-body font-[number:var(--body-font-weight)] text-variable-collection-primary-color text-[length:var(--body-font-size)] tracking-[var(--body-letter-spacing)] leading-[var(--body-line-height)] [font-style:var(--body-font-style)]">
                         Female
-                      </div>
-                    </div>
+                      </span>
+                    </label>
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className="relative self-stretch w-full h-[58px]">
+              <button
+                type="submit"
+                disabled={loading}
+                className="bg-[#84c1ad] text-white font-semibold py-2 px-4 rounded-lg w-full"
+              >
+                {loading ? "Adding Pet..." : "Add Pet"}
+              </button>
             </div>
           </div>
-
-          <div className="flex flex-col w-[1133px] items-start gap-[33px] absolute top-[567px] left-[67px]">
-            <div className="relative self-stretch mt-[-1.00px] font-sub-heading font-[number:var(--sub-heading-font-weight)] text-[#39628e] text-[length:var(--sub-heading-font-size)] tracking-[var(--sub-heading-letter-spacing)] leading-[var(--sub-heading-line-height)] [font-style:var(--sub-heading-font-style)]">
-              Add Health Details
-            </div>
-
-            <div className="flex items-start gap-[172px] relative self-stretch w-full flex-[0_0_auto]">
-              <div className="flex flex-col w-[481px] items-start gap-[38px] relative">
-                <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full flex-[0_0_auto]">
-                  <div className="relative self-stretch mt-[-1.00px] font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
-                    Last Weight Check
-                  </div>
-
-                  <div className="flex h-[45px] items-center gap-2.5 p-3.5 relative self-stretch w-full bg-greyish rounded-[10px] border border-solid border-[#b3b3b3]">
-                    <p className="relative w-fit mt-[-1.50px] font-small-body font-[number:var(--small-body-font-weight)] text-[#90a0b7] text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                      Enter pet’s last weight check
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-                  <div className="relative self-stretch mt-[-1.00px] font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
-                    Medical Records
-                  </div>
-
-                  <div className="flex flex-col h-[45px] items-start gap-2.5 px-px py-0 relative self-stretch w-full">
-                    <div className="absolute w-[480px] top-0 left-0 border-purple-fade h-[45px] bg-greyish rounded-lg border border-solid">
-                      <div className="absolute top-[13px] left-[314px] font-small-body font-[number:var(--small-body-font-weight)] text-variable-collection-primary-color text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                        Medication
-                      </div>
-                    </div>
-
-                    <div className="relative w-[249px] h-[45px] bg-variable-collection-primary-color rounded-lg border border-solid border-purple-fade">
-                      <div className="absolute top-[13px] left-[86px] font-small-body font-[number:var(--small-body-font-weight)] text-white text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                        Vaccination
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-[23px] relative self-stretch w-full flex-[0_0_auto]">
-                    <div className="relative w-[433px] h-[45px] bg-white rounded-lg border border-solid border-dark-grey">
-                      <div className="absolute top-3 left-3.5 font-small-body font-[number:var(--small-body-font-weight)] text-purple-fade text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                        Enter Vaccination Name
-                      </div>
-                    </div>
-
-                    {/* <img
-                      className="relative w-6 h-6"
-                      alt="Hugeicons cancel"
-                      src={hugeiconsCancel01}
-                    /> */}
-                  </div>
-
-                  <div className="flex items-center gap-[23px] relative self-stretch w-full flex-[0_0_auto]">
-                    <div className="relative w-[433px] h-[45px] bg-white rounded-lg border border-solid border-dark-grey">
-                      <div className="absolute top-3 left-3.5 font-small-body font-[number:var(--small-body-font-weight)] text-purple-fade text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                        Enter Vaccination Name
-                      </div>
-                    </div>
-
-                    {/* <img
-                      className="relative w-6 h-6"
-                      alt="Hugeicons cancel"
-                      src={image}
-                    /> */}
-                  </div>
-                </div>
-
-                <div className="relative self-stretch w-full h-[88px]">
-                  <div className="absolute w-[480px] -top-px left-0 font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
-                    Last Vet Visit
-                  </div>
-
-                  <div className="absolute w-[480px] h-[45px] top-[43px] left-0 bg-greyish rounded-lg border border-solid border-dark-grey">
-                    <div className="absolute top-3 left-3.5 font-small-body font-[number:var(--small-body-font-weight)] text-purple-fade text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                      24/12/2024
-                    </div>
-
-                    {/* <img
-                      className="absolute w-[26px] h-[29px] top-[7px] left-[441px]"
-                      alt="Vector"
-                      src={vector2}
-                    /> */}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col w-[480px] items-start gap-[37px] relative">
-                <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full flex-[0_0_auto]">
-                  <div className="relative self-stretch mt-[-1.00px] font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] [font-style:var(--heading-2-font-style)]">
-                    Operation/Major Procedures
-                  </div>
-
-                  <div className="relative self-stretch w-full h-[45px] bg-greyish rounded-lg border border-solid border-dark-grey">
-                    <p className="absolute top-[13px] left-3.5 font-small-body font-[number:var(--small-body-font-weight)] text-[#90a0b7] text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                      Enter pets last operations or major procedures
-                    </p>
-
-                    {/* <img
-                      className="absolute w-7 h-7 top-[3px] left-[438px]"
-                      alt="Fluent ios arrow"
-                      src={fluentIosArrow24Filled2}
-                    /> */}
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
-                  <div className="mt-[-1.00px] font-heading-2 font-[number:var(--heading-2-font-weight)] text-[#38618d] text-[length:var(--heading-2-font-size)] tracking-[var(--heading-2-letter-spacing)] leading-[var(--heading-2-line-height)] relative self-stretch [font-style:var(--heading-2-font-style)]">
-                    Food Allergies
-                  </div>
-
-                  <div className="relative self-stretch w-full h-[45px]">
-                    <div className="relative w-[480px] border-purple-fade h-[45px] bg-greyish rounded-lg border border-solid">
-                      <p className="absolute top-[13px] left-[23px] font-small-body font-[number:var(--small-body-font-weight)] text-variable-collection-primary-color text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                        You can add as many as you like
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-[23px] relative self-stretch w-full flex-[0_0_auto]">
-                    <div className="relative w-[433px] h-[45px] bg-white rounded-lg border border-solid border-dark-grey">
-                      <div className="absolute top-3 left-3.5 font-small-body font-[number:var(--small-body-font-weight)] text-purple-fade text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                        Enter pet food allergy
-                      </div>
-                    </div>
-
-                    {/* <img
-                      className="relative w-6 h-6"
-                      alt="Hugeicons cancel"
-                      src={hugeiconsCancel012}
-                    /> */}
-                  </div>
-
-                  <div className="flex items-center gap-[23px] w-full flex-[0_0_auto] relative self-stretch">
-                    <div className="relative w-[433px] h-[45px] bg-white rounded-lg border border-solid border-dark-grey">
-                      <div className="absolute top-3 left-3.5 font-small-body font-[number:var(--small-body-font-weight)] text-purple-fade text-[length:var(--small-body-font-size)] tracking-[var(--small-body-letter-spacing)] leading-[var(--small-body-line-height)] [font-style:var(--small-body-font-style)]">
-                        Enter pet food allergy
-                      </div>
-                    </div>
-
-                    {/* <img
-                      className="relative w-6 h-6"
-                      alt="Hugeicons cancel"
-                      src={hugeiconsCancel013}
-                    /> */}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col w-[286px] items-start gap-[38px] absolute top-[1176px] left-[67px]">
-            <div className="relative w-[251px] h-8">
-              <p className="absolute top-[7px] left-9 [font-family:'Lato-Regular',Helvetica] font-normal text-variable-collection-primary-color text-sm text-center tracking-[0] leading-[normal]">
-                <span className="[font-family:'Lato-Regular',Helvetica] font-normal text-[#38618d] text-sm tracking-[0]">
-                  I agree to all{" "}
-                </span>
-
-                <span className="[font-family:'Lato-SemiBold',Helvetica] font-semibold">
-                  Terms and Conditions
-                </span>
-              </p>
-
-              {/* <img
-                className="absolute w-8 h-8 top-0 left-0"
-                alt="Bx checkbox"
-                src={bxCheckbox}
-              /> */}
-            </div>
-
-            <button className="all-[unset] box-border flex h-[66px] items-center justify-center gap-2.5 px-[60px] py-[11px] relative self-stretch w-full">
-              <div className="absolute w-[286px] h-[66px] top-0 left-0 bg-[#39628e] rounded-[10px]" />
-
-              <div className="relative w-[125px] font-sub-heading font-[number:var(--sub-heading-font-weight)] text-[#ffffff] text-[length:var(--sub-heading-font-size)] text-center tracking-[var(--sub-heading-letter-spacing)] leading-[var(--sub-heading-line-height)] [font-style:var(--sub-heading-font-style)]">
-              <a href="/overview">Submit</a>
-              </div>
-            </button>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
   );
