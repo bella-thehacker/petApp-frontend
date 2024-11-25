@@ -18,7 +18,7 @@
 .appointments .group-37 {
   left: 1216px !important;
   position: absolute !important;
-  top: 132px !important;
+  top: 130px !important;
 }
 
 .appointments .text-wrapper-6 {
@@ -867,16 +867,14 @@
   position: absolute;
   top: 18px;
   width: 818px;
+  margin-top: 100px;
+  object-fit: contain;
 }
 
-.appointments .frame-10 {
-  align-items: center;
-  display: inline-flex;
-  gap: 127px;
-  left: 28px;
-  position: absolute;
-  top: 0;
-}
+/* .appointments .frame-10 {
+  height: 500px;
+  background-color: #1e1e1e;
+} */
 
 .appointments .frame-11 {
   align-items: flex-start;
@@ -981,30 +979,13 @@
 }
 
 /* Dark Mode Styles */
-.dark-mode {
+.dark-mode .div-2 {
   background-color: #121212;
   color: #e0e0e0;
 }
 
-.dark-mode .settings-container {
-  background-color: #1e1e1e;
+.dark-mode .appointments{
+  background-color: #121212;
   color: #e0e0e0;
 }
 
-.dark-mode .settings-option button {
-  background-color: rgba(56, 97, 141, 1);
-  color: #ffffff;
-  transition: background-color 0.3s ease;
-}
-
-.dark-mode .settings-option button:hover {
-  background-color: rgba(40, 70, 100, 1);
-}
-
-.dark-mode .logout-button {
-  background-color: #e53935;
-}
-
-.dark-mode .logout-button:hover {
-  background-color: #b71c1c;
-}

@@ -127,6 +127,7 @@ export const Login = () => {
                 <button className="bg-gray-100 p-2 rounded-full">
                   <img src="/iconapple.png" alt="Apple" />
                 </button>
+
               </div>
 
               <p className="text-center text-sm">
