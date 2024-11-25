@@ -64,7 +64,7 @@ export const Community = () => {
   const createPost = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://petapp-backend-abg7.onrender.com//community', {
+      const response = await axios.post('https://petapp-backend-abg7.onrender.com/community', {
         title: newPost.title,
         description: newPost.description,
         comment: newPost.comment,
@@ -82,7 +82,7 @@ export const Community = () => {
   // Like post
   const likePost = async (postId) => {
     try {
-      const response = await axios.post(`https://petapp-backend-abg7.onrender.com//community/${postId}/like`);
+      const response = await axios.post(`https://petapp-backend-abg7.onrender.com/community/${postId}/like`);
       const updatedPosts = posts.map((post) =>
         post.id === postId ? { ...post, likes: response.data.likes } : post
       );
