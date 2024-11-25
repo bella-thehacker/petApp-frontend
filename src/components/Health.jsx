@@ -8,6 +8,7 @@ import { GoMegaphone } from "react-icons/go";
 
 export const Health = () => {
   return (
+    <div className="health-page-full">
     <div className="health">
       <div className="div">
         <div className="health-overview">
@@ -427,6 +428,7 @@ export const Health = () => {
           </div>
         </div> */}
       </div>
+    </div>
     </div>
   );
 };
