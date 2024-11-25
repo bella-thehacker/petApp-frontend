@@ -1,0 +1,18 @@
+.dark-mode .overview-container {
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+  
+  .dark-mode .overview-header {
+    color: #e0e0e0;
+  }
+  
+  .dark-mode .overview-item {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border: 1px solid #444;
+  }
+  
+  .dark-mode .overview-item:hover {
+    background-color: #2e2e2e;
+  }

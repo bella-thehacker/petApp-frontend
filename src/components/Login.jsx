@@ -138,7 +138,7 @@ export const Login = () => {
                   <button
                     type='submit'
                     disabled={isSubmitting}
-                    className="absolute top-4 left-[123px] [font-family:'Instrument_Sans-Regular',Helvetica] font-normal text-white text-2xl tracking-[0] leading-[normal]">
+                    className="absolute top-4 left-[123px] h-10 [font-family:'Instrument_Sans-Regular',Helvetica] font-normal text-white text-2xl tracking-[0] leading-[normal]">
                     {/* {isSubmitting ? 'Logging in...' : 'Log in'} */}
                     <a href="/addpet">Log in</a>
                   </button>
