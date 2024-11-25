@@ -204,7 +204,7 @@ import React from "react";
 // import vector8 from "./vector-8.svg";
 // import vector from "./vector.svg";
 
-function Appoint(){
+ export function Appoint(){
     return (
         <div className="appointments">
             <div className="div-2">
@@ -569,4 +569,3 @@ function Appoint(){
     );
 };
 
-export default Appoint
