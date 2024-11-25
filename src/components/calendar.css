@@ -18,7 +18,7 @@
 }
 
 .react-calendar {
-  width: 100rem; /* Make the calendar fill its container */
+  width: 200rem; /* Make the calendar fill its container */
   font-size: 1.2rem; /* Increase font size inside the calendar */
   border-radius: 10px;
   background: none;
