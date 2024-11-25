@@ -166,6 +166,7 @@ import "./Appoint.css"
 
 export default appoint */}
 import React from "react";
+import { Navbar } from "./Navbar";
 // import { Arrow } from "./Arrow";
 // import { Arrow1 } from "./Arrow1";
 // import { Group } from "./Group";
@@ -206,6 +207,8 @@ import React from "react";
 
  export function Appoint(){
     return (
+      <div>
+          <Navbar/>
         <div className="appointments">
             <div className="div-2">
                 {/* <Group className="group-37" /> */}
@@ -565,6 +568,7 @@ import React from "react";
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 };
